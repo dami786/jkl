@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { getProductBySlug } from "../../data/products";
 
-export default function OrderSuccessPage() {
+function OrderSuccessContent() {
   const searchParams = useSearchParams();
   const slug = searchParams.get("product");
   const productsParam = searchParams.get("products");
@@ -82,6 +83,23 @@ export default function OrderSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OrderSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="mx-auto max-w-xl px-4 pb-10 pt-10">
+        <div className="rounded-3xl border border-emerald-500/50 bg-slate-900/80 px-5 py-6 text-sm text-slate-100">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-300">
+            Order Placed
+          </p>
+          <h1 className="mt-2 text-xl font-semibold text-slate-50">Loading...</h1>
+        </div>
+      </div>
+    }>
+      <OrderSuccessContent />
+    </Suspense>
   );
 }
 

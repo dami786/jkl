@@ -1,12 +1,12 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { getProductBySlug } from "../../data/products";
 import { useCart } from "../../components/CartContext";
 import { useToast } from "../../components/ToastContext";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
   const slug = searchParams.get("product");
   const product = slug ? getProductBySlug(slug) : null;
@@ -140,6 +140,19 @@ export default function CheckoutPage() {
         </button>
       </form>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="mx-auto max-w-xl px-4 pb-10 pt-8 text-sm text-slate-200">
+        <h1 className="text-xl font-semibold text-slate-50">Checkout</h1>
+        <p className="mt-1 text-xs text-slate-400">Loading...</p>
+      </div>
+    }>
+      <CheckoutContent />
+    </Suspense>
   );
 }
 
